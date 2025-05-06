@@ -12,7 +12,7 @@ class Cliente_Controller {
             console.log(`Cliente ${nome} criado com sucesso!`);
             return cliente
         } catch (error) {
-            console.error(error);
+            console.error('Erro ao Criar Cliente', error.message);
         }
     }
 

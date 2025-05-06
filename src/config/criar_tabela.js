@@ -13,7 +13,7 @@ class Criar_Tabela {
         );`;
 
         await client.query(consulta);
-        console.log('Table Cliente criada com sucesso!')
+        console.log('Tabela Cliente criada com sucesso!')
     }
 
     static async veiculos() {
@@ -26,7 +26,7 @@ class Criar_Tabela {
         );`;
 
         await client.query(consulta);
-        console.log('Table Veiculo criada com sucesso!')
+        console.log('Tabela Veiculo criada com sucesso!')
     }
 
     static async ordens_servico() {
@@ -40,7 +40,7 @@ class Criar_Tabela {
         );`;
 
         await client.query(consulta);
-        console.log('Table Ordem de Serviço criada com sucesso!')
+        console.log('Tabela Ordem de Serviço criada com sucesso!')
     }
 
 
