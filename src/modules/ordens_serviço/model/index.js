@@ -2,9 +2,9 @@ import client from "../../../config/database.js";
 
 class OrdemServicoModel{
 
-    static async cadastrar_ordem_servico(id_cliente, id_veiculo, id_funcionario, data_abertura, descricao) {
-        const dados = [id_cliente, id_veiculo, id_funcionario, data_abertura, descricao];
-        const consulta = `insert into ordens_servico(id_cliente,id_veiculo,id_funcionario,data_abertura,descricao) values($1,$2,$3,$4,$5) returning *`;
+    static async cadastrar_ordem_servico( id_veiculo, data, descricao,valor, status) {
+        const dados = [id_veiculo, data, descricao, valor, status];
+        const consulta = `insert into ordens_servico(id_veiculo,data,descricao,valor,status) values($1,$2,$3,$4,$5) returning *`;
         const resultado = await client.query(consulta, dados);
         return resultado.rows;
     }
@@ -13,7 +13,7 @@ class OrdemServicoModel{
     static async listar_ordem_servico_veiculo(id_veiculo) { 
         const dados = [id_veiculo];
         const consulta = `
-        select ordens_servico.id_ordem_servico, ordens_servico.data_abertura, ordens_servico.status, clientes.nome, veiculos.modelo from ordens_servico 
+        select ordens_servico.id_ordem_servico, ordens_servico.data, ordens_servico.status, clientes.nome, veiculos.modelo from ordens_servico 
         join veiculos on ordens_servico.id_veiculo = veiculos.id_veiculo 
         join clientes on veiculos.id_cliente = clientes.id_cliente 
         where ordens_servico.id_veiculo = $1`;
@@ -33,11 +33,28 @@ class OrdemServicoModel{
     static async contar_somar_valor_por_cliente(id_cliente) {
         const dados = [id_cliente];
         const consulta = `
-        select count (ordens_servico.id_ordem_servico) as total_ordens_servico,sum (ordens_servico.valor) as total_valor, clientes.nome from ordens_servico
+        select count (ordens_servico.id_ordem_servico) as total_ordens_servico,sum (ordens_servico.valor) as total_valor from ordens_servico
         join veiculos on ordens_servico.id_veiculo = veiculos.id_veiculo
         join clientes on veiculos.id_cliente = clientes.id_cliente 
-        where ordens_servico.id_cliente = $1`;
+        where clientes.id_cliente = $1`;
         const resultado = await client.query(consulta, dados);
         return resultado.rows;
     }
+
+    static async atualizar_ordem_servico(id_ordem_servico, descricao, valor, status) {
+        const dados = [id_ordem_servico, descricao, valor, status];
+        const consulta = `update ordens_servico set status = $4, descricao = $2, valor = $3 where id_ordem_servico = $1 returning *`;
+        const resultado = await client.query(consulta, dados);
+        return resultado.rows;
+    }
+    
+    static async deletar_ordem_servico(id_ordem_servico) {
+        const dados = [id_ordem_servico];
+        const consulta = `delete from ordens_servico where id_ordem_servico = $1 returning *`;
+        const resultado = await client.query(consulta, dados);
+        return resultado.rows;
+    }
+
 }
+
+export default OrdemServicoModel;
