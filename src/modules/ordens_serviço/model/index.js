@@ -13,10 +13,8 @@ class OrdemServicoModel{
     static async listar_ordem_servico_veiculo(id_veiculo) { 
         const dados = [id_veiculo];
         const consulta = `
-        select ordens_servico.id_ordem_servico, ordens_servico.data, ordens_servico.status, clientes.nome, veiculos.modelo from ordens_servico 
-        join veiculos on ordens_servico.id_veiculo = veiculos.id_veiculo 
-        join clientes on veiculos.id_cliente = clientes.id_cliente 
-        where ordens_servico.id_veiculo = $1`;
+        select * from conta_e_soma
+        where clientes.id_cliente = $1`;
         const resultado = await client.query(consulta, dados);
         return resultado.rows;
     }
