@@ -10,11 +10,10 @@ class VeiculoModel{
         return resultado.rows;
     }
 
-    static async listar_veiculo_cliente(id_cliente) {// lista_veiculo_cliente, listarVeiculoCliente
+    static async listar_veiculo_cliente(id_cliente) {
         const dados = [id_cliente];
         const consulta = `
-        select clientes.nome, veiculos.modelo from veiculos 
-        join clientes on veiculos.id_cliente = clientes.id_cliente 
+        select * from listar_veiculo_por_cliente
         where veiculos.id_cliente = $1`;
         const resultado = await client.query(consulta, dados);
         return resultado.rows;

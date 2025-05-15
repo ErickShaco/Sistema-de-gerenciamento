@@ -13,16 +13,17 @@ class OrdemServicoModel{
     static async listar_ordem_servico_veiculo(id_veiculo) { 
         const dados = [id_veiculo];
         const consulta = `
-        select * from conta_e_soma
-        where clientes.id_cliente = $1`;
+        select * from listar_ordem_por_veiculos
+        where veiculos.id_veiculo = $1
+       `;
         const resultado = await client.query(consulta, dados);
         return resultado.rows;
     }
 
     static async filtrar_ordem_servico_por_status(status) {
         const dados = [status];
-        const consulta = `select ordens_servico.id_ordem_servico, ordens_servico.status, veiculos.modelo from ordens_servico 
-        join veiculos on ordens_servico.id_veiculo = veiculos.id_veiculo 
+        const consulta = `
+        select * from filtrar_por_status
         where ordens_servico.status = $1`;
         const resultado = await client.query(consulta, dados);
         return resultado.rows;
@@ -31,9 +32,7 @@ class OrdemServicoModel{
     static async contar_somar_valor_por_cliente(id_cliente) {
         const dados = [id_cliente];
         const consulta = `
-        select count (ordens_servico.id_ordem_servico) as total_ordens_servico,sum (ordens_servico.valor) as total_valor from ordens_servico
-        join veiculos on ordens_servico.id_veiculo = veiculos.id_veiculo
-        join clientes on veiculos.id_cliente = clientes.id_cliente 
+        select * from conta_e_soma
         where clientes.id_cliente = $1`;
         const resultado = await client.query(consulta, dados);
         return resultado.rows;
